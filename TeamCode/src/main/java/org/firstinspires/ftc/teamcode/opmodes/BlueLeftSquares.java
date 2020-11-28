@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.robot.OpenCvDetector;
 
 import static android.icu.lang.UCharacter.DecompositionType.SQUARE;
 
-@Autonomous(name = "RedRightSquares", group = "drive")
-public class RedRightSquares extends OpenCvDetector {
+@Autonomous(name = "BlueLeftSquares", group = "drive")
+public class BlueLeftSquares extends OpenCvDetector {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,21 +37,20 @@ public class RedRightSquares extends OpenCvDetector {
                 .build();
 
         Trajectory strafeRight = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .strafeRight(10)
+                .strafeRight(-15)
                 .build();
 
         Trajectory locateA = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(20, 10), 0)
+                .splineTo(new Vector2d(20, 0), 0)
                 .build();
 
         Trajectory locateB = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(40, 25), 0)
+                .splineTo(new Vector2d(40, -10), 0)
                 .build();
 
         Trajectory locateC = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(60, 10), 0)
+                .splineTo(new Vector2d(60, 0), 0)
                 .build();
-
 
 
         Trajectory pickedTraj = null;
@@ -64,39 +63,41 @@ public class RedRightSquares extends OpenCvDetector {
         drive.followTrajectory(strafeRight);
         drive.followTrajectory(moveForward);
 
-        drive.turn(Math.toRadians(39));
+        drive.turn(Math.toRadians(-12));
         //todo: pauses and other actions are done via markers.
         sleep(1000);
         drive.TurnJHopShooterOn(210);
         drive.FullAutoShoot();
 
-        drive.turn(Math.toRadians(14));
+        drive.turn(Math.toRadians(-14));
         sleep(500);
         drive.FullAutoShoot();
 
-        drive.turn(Math.toRadians(5));
-        sleep(500);
-        drive.FullAutoShoot();
         drive.TurnJHopShooterOff();
-        sleep(500);
 
-        drive.turn(Math.toRadians(-45));
+        drive.turn(Math.toRadians(30));
 
         if (rings == GoalDeterminationPipeline.RingPosition.NONE) {
+
             drive.followTrajectory(locateA);
             pickedTraj = locateA;
 
+            Trajectory left = new TrajectoryBuilder(pickedTraj.end(), drive.constraints)
+                    .strafeLeft(-10)
+                    .build();
+
+            drive.turn(Math.toRadians(-210));
+            sleep(100);
             drive.AutoArmDropOff();
+            sleep(100);
+            drive.followTrajectory(strafeRight);
+            sleep(50);
+            drive.turn(Math.toRadians(210));
 
             //wait for the servo to disengage
-            sleep(2000);
+            sleep(1000);
 
             //move the arm to the top
-
-
-            Trajectory left = new TrajectoryBuilder(pickedTraj.end(), drive.constraints)
-                    .strafeLeft(10)
-                    .build();
 
             drive.followTrajectory(left);
             drive.AutoArmTop();
@@ -111,7 +112,7 @@ public class RedRightSquares extends OpenCvDetector {
             pickedTraj = locateC;
         }
 
-        sleep(1000);
+        sleep(500);
 
         telemetry.addData("Path", "Ready to park");
         telemetry.update();
@@ -119,43 +120,55 @@ public class RedRightSquares extends OpenCvDetector {
         if(pickedTraj != null) {
             if( rings == GoalDeterminationPipeline.RingPosition.FOUR) {
 
+                drive.turn(Math.toRadians(-210));
+                sleep(100);
                 drive.AutoArmDropOff();
+                sleep(100);
+                drive.followTrajectory(strafeRight);
+                sleep(50);
+                drive.turn(Math.toRadians(210));
 
                 //wait for the servo to disengage
-                sleep(2000);
+                sleep(1000);
 
                 //move the arm to the top
 
 
-                /*Trajectory left = new TrajectoryBuilder(pickedTraj.end(), drive.constraints)
-                        .strafeLeft(40)
-                        .build();*/
+                /*Trajectory right = new TrajectoryBuilder(pickedTraj.end(), drive.constraints)
+                        .strafeLeft(-40)
+                        .build();
 
-                //drive.followTrajectory(left);
+                drive.followTrajectory(right);*/
 
                 drive.AutoArmTop();
 
                 Trajectory rev = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                        .back(43)
+                        .back(38)
                         .build();
 
                 drive.followTrajectory(rev);
 
             }else if( rings == GoalDeterminationPipeline.RingPosition.ONE){
 
+                drive.turn(Math.toRadians(-210));
+                sleep(100);
                 drive.AutoArmDropOff();
+                sleep(100);
+                drive.followTrajectory(strafeRight);
+                sleep(50);
+                drive.turn(Math.toRadians(210));
 
                 //wait for the servo to disengage
-                sleep(2000);
+                sleep(1000);
 
                 //move the arm to the top
 
 
-                /*Trajectory left = new TrajectoryBuilder(pickedTraj.end(), drive.constraints)
-                        .strafeLeft(10)
+                /*Trajectory right = new TrajectoryBuilder(pickedTraj.end(), drive.constraints)
+                        .strafeLeft(-10)
                         .build();
 
-                drive.followTrajectory(left);*/
+                drive.followTrajectory(right);*/
                 drive.AutoArmTop();
 
                 Trajectory rev = new TrajectoryBuilder(new Pose2d(), drive.constraints)

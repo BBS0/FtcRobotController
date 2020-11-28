@@ -13,6 +13,7 @@ SOFTWARE.
 
 package org.firstinspires.ftc.teamcode.opmodes;
 
+//import com.acmerobotics.dashboard.config.Config;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -22,18 +23,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.BotBuildersMecBot;
-import org.firstinspires.ftc.teamcode.robot.OpenCvDetector;
-
-import static android.icu.lang.UCharacter.DecompositionType.SQUARE;
+//import org.firstinspires.ftc.teamcode.rr_quickstart_examples.drive.SampleMecanumDrive;
 
 /*
  * This is a simple routine to test translational drive capabilities.
  */
 //@Config
-//@Autonomous(name = "RedLeftSquares", group = "drive")
-public class RedLeftSquares extends OpenCvDetector {
+//@Autonomous(name = "BlueRightSquares", group = "drive")
+public class BlueRightSquares extends LinearOpMode {
     public static double DISTANCE = 60; // in
-    public int SQUARE;
+    public static int SQUARE = 3;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,51 +43,44 @@ public class RedLeftSquares extends OpenCvDetector {
                 .build();
 
         Trajectory locateA = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(70, -35), 0)
+                .splineTo(new Vector2d(70, 35), 0)
                 .build();
 
         Trajectory locateB = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(40, 10), 0)
-                .splineTo(new Vector2d(100, -15), 0)
+                .splineTo(new Vector2d(40, -10), 0)
+                .splineTo(new Vector2d(100, 10), 0)
                 .build();
 
         Trajectory locateC = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(40,10), 0)
-                .splineTo(new Vector2d(120, -35), 0)
+                .splineTo(new Vector2d(40, -10), 0)
+                .splineTo(new Vector2d(120, 35), 0)
                 .build();
 
-        Trajectory parkFromB = new TrajectoryBuilder(locateB.end(), drive.constraints)
-                .splineTo(new Vector2d(70, -35), 0)
-                .build();
-
-        Trajectory parkFromC = new TrajectoryBuilder(locateC.end(), drive.constraints)
-                .splineTo(new Vector2d(70, -35), 0)
+        Trajectory park = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .splineTo(new Vector2d(70, 35), 0)
                 .build();
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        //drive.followTrajectory(moveForward);
-        //drive.turn(Math.toRadians(-45));
+        drive.followTrajectory(moveForward);
+        drive.turn(Math.toRadians(45));
+        sleep(1000);
 
-        super.runOpMode(); //runs OpenCV program and sets rings to the number of rings it sees
+        // add in the camera code here
 
-        //drive.turn(Math.toRadians(45));
+        drive.turn(Math.toRadians(-45));
 
-        //Pose2d endpose = new Pose2d();
-
-        if (rings == GoalDeterminationPipeline.RingPosition.NONE) {
+        if (SQUARE == 1)
             drive.followTrajectory(locateA);
-        } else if (rings == GoalDeterminationPipeline.RingPosition.ONE) {
+        else if (SQUARE == 2)
             drive.followTrajectory(locateB);
-            sleep(1000);
-            drive.followTrajectory(parkFromB);
-        } else if (rings == GoalDeterminationPipeline.RingPosition.FOUR) {
+        else if (SQUARE == 3)
             drive.followTrajectory(locateC);
-            sleep(1000);
-            drive.followTrajectory(parkFromC);
-        }
+
+        sleep(1000);
+        drive.followTrajectory(park);
     }
 }
 

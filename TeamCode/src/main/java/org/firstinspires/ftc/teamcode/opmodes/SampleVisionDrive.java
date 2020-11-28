@@ -17,21 +17,23 @@ public class SampleVisionDrive extends OpenCvDetector {
         super.runOpMode(); //runs OpenCV program and sets rings to the number of rings it sees
         if (isStopRequested()) return;
 
+
+
         //todo: place your auto code below
-        FtcDashboard.getInstance().startCameraStream(webcam, 0);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        //FtcDashboard.getInstance().startCameraStream(webcam, 0);
+       // telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         //This while loop is just a sample
         while (opModeIsActive())
         {
 
-            telemetry.addData("Rings", rings);
+            telemetry.addData("Rings", super.pipeline.position);
             //telemetry.addData("Threshold", thresholdValue);
             telemetry.update();
 
             sleep(50);
         }
 
-        FtcDashboard.getInstance().stopCameraStream();
+       //FtcDashboard.getInstance().stopCameraStream();
 
 
     }

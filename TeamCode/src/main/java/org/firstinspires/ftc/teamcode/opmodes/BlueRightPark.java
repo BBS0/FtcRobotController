@@ -1,24 +1,23 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+//import com.acmerobotics.dashboard.config.Config;
 
-        import com.acmerobotics.dashboard.config.Config;
-        import com.acmerobotics.roadrunner.geometry.Pose2d;
-        import com.acmerobotics.roadrunner.geometry.Vector2d;
-        import com.acmerobotics.roadrunner.trajectory.Trajectory;
-        import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-        import org.firstinspires.ftc.teamcode.robot.BotBuildersMecBot;
+import org.firstinspires.ftc.teamcode.robot.BotBuildersMecBot;
+//import org.firstinspires.ftc.teamcode.rr_quickstart_examples.drive.SampleMecanumDrive;
 
-@Config
-@Autonomous(name = "RedLeftPark", group = "drive")
-public class RedLeftPark extends LinearOpMode {
-    public static double DISTANCE = 80; // in
+//@Config
+@Autonomous(name = "BlueRightPark", group = "drive")
+public class BlueRightPark extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         BotBuildersMecBot drive = new BotBuildersMecBot(hardwareMap);
         drive.opMode = this;
         drive.AutoLockGoal();
@@ -26,7 +25,7 @@ public class RedLeftPark extends LinearOpMode {
         //sleep(25000);
 
         Trajectory trajectory = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(DISTANCE, 10), 0)
+                .splineTo(new Vector2d(80, -10), 0)
                 .build();
 
         Trajectory strafe = new TrajectoryBuilder(new Pose2d(), drive.constraints)

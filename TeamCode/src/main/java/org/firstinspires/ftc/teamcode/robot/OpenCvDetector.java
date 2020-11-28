@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 @Autonomous
 public class OpenCvDetector extends LinearOpMode {
 
-    GoalDeterminationPipeline pipeline;
+    public GoalDeterminationPipeline pipeline;
     public OpenCvCamera webcam;
 
     public GoalDeterminationPipeline.RingPosition rings;
@@ -59,24 +59,17 @@ public class OpenCvDetector extends LinearOpMode {
             }
         });
 
-        waitForStart();
-        if (isStopRequested()) return;
-        rings = pipeline.position;
-        //thresholdValue = pipeline.avg1;
+        while(!opModeIsActive() && !isStopRequested()){
 
-        int i;
-        for (i = 0; i < 5; i ++)
-        {
-            telemetry.addData("Rings", pipeline.position);
-            telemetry.addData("Analysis", pipeline.getAnalysis());
+            pipeline.getAnalysis();
+            telemetry.addData("1# Rings", pipeline.position);
+            telemetry.addData("AVG", pipeline.avg1);
             telemetry.update();
-
             rings = pipeline.position;
-            analyis = pipeline.getAnalysis();
-
-            sleep(50);
         }
 
+        telemetry.addData("Stop","Cam Stopped");
+        telemetry.update();
         webcam.stopStreaming();
         webcam.closeCameraDevice();
     }
@@ -104,8 +97,8 @@ public class OpenCvDetector extends LinearOpMode {
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
 
-        final int FOUR_RING_THRESHOLD = 150;
-        final int ONE_RING_THRESHOLD = 130;
+        final int FOUR_RING_THRESHOLD = 145; // TEST THESE VALUES
+        final int ONE_RING_THRESHOLD = 135;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
@@ -123,7 +116,7 @@ public class OpenCvDetector extends LinearOpMode {
         int avg1;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        private volatile RingPosition position = RingPosition.FOUR;
+        public volatile RingPosition position = RingPosition.FOUR;
 
         /*
          * This function takes the RGB frame, converts to YCrCb,
