@@ -113,12 +113,22 @@ public class ManualTeleOP extends LinearOpMode {
                 drive.TurnJHopShooterOff();
             }
 
-            if(gp1.getButton(GamepadKeys.Button.DPAD_LEFT) || gp2.getButton(GamepadKeys.Button.DPAD_LEFT)){
+           /* if(gp1.getButton(GamepadKeys.Button.DPAD_LEFT) || gp2.getButton(GamepadKeys.Button.DPAD_LEFT)){
               drive.UnlockArm();
             }
             if(gp1.getButton(GamepadKeys.Button.DPAD_RIGHT) || gp2.getButton(GamepadKeys.Button.DPAD_RIGHT)){
               drive.LockArm();
+            }*/
+            if(gp1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON) || gp2.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)){
+
+                drive.LockArm();
             }
+
+            if(gp1.getButton(GamepadKeys.Button.LEFT_BUMPER) || gp2.getButton(GamepadKeys.Button.LEFT_BUMPER)){
+
+                drive.UnlockArm();
+            }
+
             boolean fastArm = true;
             if(gp1.gamepad.left_trigger > 0.6 || gp2.gamepad.left_trigger > 0.6) {
                 fastArm = false;

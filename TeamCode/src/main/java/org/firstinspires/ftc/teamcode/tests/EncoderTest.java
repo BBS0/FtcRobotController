@@ -54,18 +54,18 @@ public class EncoderTest extends LinearOpMode {
 
         DcMotor shooter = hardwareMap.get(DcMotor.class,"shooter");
 
-        DcMotor right_enc = hardwareMap.get(DcMotor.class,"intake");
+        DcMotor right_enc = hardwareMap.get(DcMotor.class,"front_right_motor");
         DcMotor left_enc = hardwareMap.get(DcMotor.class,"left_enc");
-        DcMotor center_enc = hardwareMap.get(DcMotor.class,"right_enc");
+        DcMotor center_enc = hardwareMap.get(DcMotor.class,"intake");
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
 
-            telemetry.addData("F Left", fleft.getCurrentPosition());
-            telemetry.addData("F Right", fright.getCurrentPosition());
-            telemetry.addData("B Right", bright.getCurrentPosition());
-            telemetry.addData("B Left", bleft.getCurrentPosition());
+           // telemetry.addData("F Left", fleft.getCurrentPosition());
+            //telemetry.addData("F Right", fright.getCurrentPosition());
+            //telemetry.addData("B Right", bright.getCurrentPosition());
+           // telemetry.addData("B Left", bleft.getCurrentPosition());
             telemetry.addData("Shooter", shooter.getCurrentPosition());
 
             telemetry.addData("L Enc", left_enc.getCurrentPosition());

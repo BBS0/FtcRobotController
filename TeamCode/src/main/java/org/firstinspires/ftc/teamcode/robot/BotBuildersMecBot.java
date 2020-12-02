@@ -273,15 +273,19 @@ public class  BotBuildersMecBot extends MecanumDrive
 
     public void AutoLockGoal()
     {
-        arm_grip.setPosition(0);
+        //arm_grip.setPosition(0);
+        arm_grip.setPosition(0.75);
     }
 
     public void LockArm(){
-        arm_grip.setPosition(0);
+
+       // arm_grip.setPosition(0);
+        arm_grip.setPosition(0.75);
     }
 
     public void UnlockArm(){
-        arm_grip.setPosition(1);
+        //arm_grip.setPosition(0.75);
+        arm_grip.setPosition(0);
     }
 
     public void StopArm(){

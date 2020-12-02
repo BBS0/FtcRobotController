@@ -6,20 +6,69 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.BotBuildersMecBot;
 import org.firstinspires.ftc.teamcode.robot.OpenCvDetector;
 
-import static android.icu.lang.UCharacter.DecompositionType.SQUARE;
-
-@Autonomous(name = "RedRightSquares", group = "drive")
-public class RedRightSquares extends OpenCvDetector {
+@Autonomous(name = "StraferAuto", group = "drive")
+public class StrafeAuto extends OpenCvDetector {
 
     @Override
     public void runOpMode() throws InterruptedException {
         BotBuildersMecBot drive = new BotBuildersMecBot(hardwareMap);
         drive.opMode = this;
+
+        //drive a little bit forward
+        Trajectory forwardOntoLine = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .forward(10)
+                .build();
+
+        Trajectory moveForward = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .forward(45)
+                .build();
+
+        Trajectory movesmallForward = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .forward(10)
+                .build();
+
+        Trajectory strafeLeft1 = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .strafeLeft(35)
+                .build();
+
+
+        Trajectory strafeRight1 = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .strafeRight(20)
+                .build();
+
+        Trajectory strafeRight2 = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .strafeRight(15)
+                .build();
+
+        Trajectory strafeAwayLeft = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .strafeLeft(15)
+                .build();
+
+        Trajectory locateB = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .splineTo(new Vector2d(35, -5), 0)
+                .build();
+
+        Trajectory locateC = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .splineTo(new Vector2d(53, -25), 0)
+                .build();
+
+        Trajectory strafeRightToWall = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .strafeRight(43)
+                .build();
+
+        Trajectory revOne = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .back(15)
+                .build();
+
+        Trajectory revC = new TrajectoryBuilder(new Pose2d(), drive.constraints)
+                .back(35)
+                .build();
+        drive.LockArm();
+
 
         drive.AutoLockGoal();
         super.runOpMode(); //runs OpenCV program and sets rings to the number of rings it sees
@@ -28,31 +77,6 @@ public class RedRightSquares extends OpenCvDetector {
 
         drive.AutoArmPickUp();
 
-        Trajectory moveForward = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .forward(49)
-                .build();
-
-        Trajectory moveForwardAgain = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .forward(5)
-                .build();
-
-        Trajectory strafeRight = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .strafeRight(10)
-                .build();
-
-        Trajectory locateA = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(20, 10), 0)
-                .build();
-
-        Trajectory locateB = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(40, 25), 0)
-                .build();
-
-        Trajectory locateC = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(50, 10), 0)
-                .build();
-
-
 
         Trajectory pickedTraj = null;
 
@@ -60,46 +84,44 @@ public class RedRightSquares extends OpenCvDetector {
         telemetry.addData("Rings", rings);
         telemetry.update();
 
-        drive.followTrajectory(moveForwardAgain);
-        drive.followTrajectory(strafeRight);
+        drive.followTrajectory(movesmallForward);
+        drive.followTrajectory(strafeLeft1);
         drive.followTrajectory(moveForward);
+        drive.turn(Math.toRadians(20));
 
-        drive.turn(Math.toRadians(39));
-
-        sleep(500);
-        drive.TurnJHopShooterOn(215);
+        drive.TurnJHopShooterOn(205); //was 215
         drive.FullAutoShoot();
 
-        drive.turn(Math.toRadians(10));
-        sleep(500);
+        drive.followTrajectory(strafeRight1);
+
+        sleep(200);
+        drive.turn(Math.toRadians(-10));
         drive.FullAutoShoot();
 
-        drive.turn(Math.toRadians(10));
-        sleep(500);
+        drive.followTrajectory(strafeRight2);
+
+        drive.turn(Math.toRadians(-10));
+        sleep(200);
         drive.FullAutoShoot();
         drive.TurnJHopShooterOff();
-        sleep(500);
-
-        drive.turn(Math.toRadians(-45));
 
         if (rings == GoalDeterminationPipeline.RingPosition.NONE) {
-            drive.followTrajectory(locateA);
-            pickedTraj = locateA;
 
+
+            drive.followTrajectory(forwardOntoLine);
+
+            drive.followTrajectory(strafeRightToWall);
+
+            drive.turn(Math.toRadians(10));
             drive.AutoArmDropOff();
 
             //wait for the servo to disengage
-            sleep(1200);
-
-            Trajectory strafeAwayLeft = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                    .strafeLeft(15)
-                    .build();
+            sleep(1000);
 
             drive.followTrajectory(strafeAwayLeft);
 
             drive.AutoArmTop();
 
-            sleep(1000);
             drive.LockArm();
             sleep(1000);
         }
@@ -122,30 +144,18 @@ public class RedRightSquares extends OpenCvDetector {
                 drive.AutoArmDropOff();
 
                 //wait for the servo to disengage
-                sleep(1200);
-
-
-
-                Trajectory strafeAwayLeft = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                        .strafeLeft(10)
-                        .build();
-
+                sleep(550);
 
                 drive.followTrajectory(strafeAwayLeft);
 
-
                 drive.AutoArmTop();
 
-                sleep(1000);
+                sleep(500);
 
                 drive.turn(Math.toRadians(-25));
 
-                Trajectory rev = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                        .back(35)
-                        .build();
                 drive.LockArm();
-                drive.followTrajectory(rev);
-
+                drive.followTrajectory(revC);
 
 
             }else if( rings == GoalDeterminationPipeline.RingPosition.ONE){
@@ -155,21 +165,15 @@ public class RedRightSquares extends OpenCvDetector {
                 //wait for the servo to disengage
                 sleep(1200);
 
-                Trajectory strafeAwayLeft = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                        .strafeLeft(10)
-                        .build();
-
                 drive.followTrajectory(strafeAwayLeft);
 
                 drive.AutoArmTop();
 
-                sleep(1000);
-                drive.LockArm();
-                Trajectory rev = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                        .back(25)
-                        .build();
+                sleep(500);
 
-                drive.followTrajectory(rev);
+
+                drive.LockArm();
+                drive.followTrajectory(revOne);
 
 
             }
